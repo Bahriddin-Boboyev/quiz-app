@@ -1,4 +1,7 @@
 export const mainDictionary = {
+  modalTitle: 'Awesome Quiz Application',
+  timeOff: 'Time Off',
+  timeLeft: 'Time Left',
   dialogTitle: 'Some Rules of this Quiz',
   dialogRules: [
     { id: 1, text: 'You will have only 15 seconds per each question.' },
