@@ -9,16 +9,20 @@ import {
   Typography,
 } from '@mui/material';
 import { mainDictionary } from '@/dictionary';
+import QuestionsStore from '@/store';
+import { observer } from 'mobx-react-lite';
 
-export const DialogComponent = ({ open, setState }: { open: boolean; setState: (value: boolean) => void }) => {
+export const DialogComponent = observer(() => {
+  const { isDialog, closeDialog, setModal } = QuestionsStore;
+
   const handleClose = () => {
-    setState(false);
+    closeDialog();
   };
 
   return (
     <>
       <Dialog
-        open={open}
+        open={isDialog}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
@@ -53,11 +57,18 @@ export const DialogComponent = ({ open, setState }: { open: boolean; setState: (
           <Button onClick={handleClose} variant="outlined" sx={{ fontWeight: '600' }}>
             Exit Quiz
           </Button>
-          <Button onClick={handleClose} autoFocus variant="contained" sx={{ fontWeight: '600' }}>
+          <Button
+            onClick={() => {
+              handleClose(), setModal(true);
+            }}
+            autoFocus
+            variant="contained"
+            sx={{ fontWeight: '600' }}
+          >
             Continue
           </Button>
         </DialogActions>
       </Dialog>
     </>
   );
-};
+});

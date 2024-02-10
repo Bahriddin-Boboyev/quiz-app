@@ -1,12 +1,26 @@
-// import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-// import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
-import { useState } from 'react';
+import { useEffect } from 'react';
+import { observer } from 'mobx-react-lite';
 import { Box, Container, Button } from '@mui/material';
 import { DialogComponent } from './components/Dialog';
 import { QuestionsModal } from './components/QuestionsModal';
+import { fetchQuestions } from './api/request';
+import { Difficulty } from './types';
+import QuestionsStore from './store';
 
-const App = () => {
-  const [isOpen, setIsOpen] = useState(false);
+const App = observer(() => {
+  const { openDialog, isModal } = QuestionsStore;
+
+  const startHandleQuiz = () => {
+    fetchQuestions(10, Difficulty.EASY);
+  };
+
+  useEffect(() => {
+    if (isModal) {
+      startHandleQuiz();
+    }
+  }, [isModal]);
+
+  console.log(isModal);
 
   return (
     <Box>
@@ -32,17 +46,17 @@ const App = () => {
                 backgroundColor: 'white',
               },
             }}
-            onClick={() => setIsOpen(true)}
+            onClick={() => openDialog()}
           >
             Start Quiz
           </Button>
         </Box>
 
-        <DialogComponent open={isOpen} setState={setIsOpen} />
-        <QuestionsModal />
+        <DialogComponent />
+        {isModal && <QuestionsModal />}
       </Container>
     </Box>
   );
-};
+});
 
 export default App;

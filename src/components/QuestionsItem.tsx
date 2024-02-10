@@ -1,4 +1,6 @@
 import { Box, Typography } from '@mui/material';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+// import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 
 export const QuestionsItem = () => {
   return (
@@ -23,7 +25,7 @@ export const QuestionsItem = () => {
         },
       }}
     >
-      <Typography>Hyper Text Preprocessor</Typography>
+      <Typography>Hyper Text Preprocessor</Typography> <CheckCircleOutlineIcon color="success" />
     </Box>
   );
 };
