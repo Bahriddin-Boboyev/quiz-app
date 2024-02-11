@@ -13,3 +13,14 @@ export enum Difficulty {
   MEDIUM = 'medium',
   HARD = 'hard',
 }
+
+export type AnswerStateProps = {
+  answer: string;
+  timer: number;
+  isCorrectAnswer: boolean;
+  userAnswer: string;
+  questions: Question[];
+  currentNumber: number;
+};
+
+export type AnswerStateStyle = 'correctStyle' | 'incorrectStyle' | 'defaultStyle';

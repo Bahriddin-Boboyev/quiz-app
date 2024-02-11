@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { shuffleArray } from '@/utils/shuffleArray';
+import { shuffleArray } from '@/utils';
 import { Difficulty, Question } from '@/types';
 
 export const fetchQuestions = async (amount: number, difficulty: Difficulty) => {

@@ -1,8 +1,9 @@
-import { Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Box } from '@mui/material';
 import { mainDictionary } from '@/dictionary';
 import QuestionsStore from '@/store';
 import { observer } from 'mobx-react-lite';
 import DOMPurify from 'dompurify';
+import { mainStyle } from '@/styles';
+import { Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Box } from '@mui/material';
 
 export const DialogComponent = observer(() => {
   const { isDialog, closeDialog, setModal } = QuestionsStore;
@@ -19,17 +20,17 @@ export const DialogComponent = observer(() => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title" sx={{ fontSize: '20px', fontWeight: '600' }}>
+        <DialogTitle id="alert-dialog-title" sx={mainStyle.dialogTitle}>
           {mainDictionary.dialogTitle}
         </DialogTitle>
         <hr />
-        <DialogContent sx={{ paddingY: '5px' }}>
-          <Box component="ol" sx={{ padding: '15px' }}>
+        <DialogContent sx={mainStyle.dialogContent}>
+          <Box component="ol" padding="15px">
             {mainDictionary.dialogRules.map((rule) => (
               <Box key={rule.id} component="li" margin="5px 0">
                 <DialogContentText
                   id="alert-dialog-description"
-                  sx={{ color: '#000', fontSize: '17px' }}
+                  sx={mainStyle.dialogContentText}
                   component="div"
                   dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(rule.text, { ALLOWED_TAGS: ['strong'] }) }}
                 ></DialogContentText>
@@ -39,7 +40,7 @@ export const DialogComponent = observer(() => {
         </DialogContent>
         <hr />
         <DialogActions>
-          <Button onClick={handleClose} variant="outlined" sx={{ fontWeight: '600' }}>
+          <Button onClick={handleClose} variant="outlined" sx={mainStyle.dialogBtn}>
             Exit Quiz
           </Button>
           <Button
@@ -48,7 +49,7 @@ export const DialogComponent = observer(() => {
             }}
             autoFocus
             variant="contained"
-            sx={{ fontWeight: '600' }}
+            sx={mainStyle.dialogBtn}
           >
             Continue
           </Button>

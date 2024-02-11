@@ -2,7 +2,7 @@ import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
 import '@/styles/index.css';
 import { ThemeProvider } from '@mui/material';
-import { theme } from '@/styles/theme.ts';
+import { theme } from '@/styles';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <ThemeProvider theme={theme}>

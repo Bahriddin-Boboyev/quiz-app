@@ -1,4 +1,5 @@
 import { Backdrop, CircularProgress } from '@mui/material';
+import { mainStyle } from '@/styles';
 
 type PropsType = {
   open: boolean;
@@ -6,7 +7,7 @@ type PropsType = {
 
 export const Loading = ({ open }: PropsType) => {
   return (
-    <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={open}>
+    <Backdrop sx={mainStyle.loading} open={open}>
       <CircularProgress color="inherit" />
     </Backdrop>
   );
