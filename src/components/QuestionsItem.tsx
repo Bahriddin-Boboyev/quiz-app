@@ -3,27 +3,30 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import { observer } from 'mobx-react-lite';
 import QuestionsStore from '@/store';
+import DOMPurify from 'dompurify';
 
 type PropsType = {
   answer: string;
+  timer: number;
 };
 
-export const QuestionsItem = observer(({ answer }: PropsType) => {
+export const QuestionsItem = observer(({ answer, timer }: PropsType) => {
   const { checkAnswer, isCorrectAnswer, userAnswer, questions, currentNumber } = QuestionsStore;
 
   const correctAnswer = !isCorrectAnswer && userAnswer.length && answer === questions[currentNumber]?.correct_answer;
   const correct = isCorrectAnswer && userAnswer.length && answer === userAnswer;
+  const lostTime = timer == 0 && answer === questions[currentNumber]?.correct_answer;
   const inCorrect = !isCorrectAnswer && answer === userAnswer;
 
   return (
     <Box component="li">
       <Button
         sx={{
-          color: inCorrect ? '#721c24' : correct || correctAnswer ? '#155724' : 'initial',
-          background: inCorrect ? '#f8d7da' : correct || correctAnswer ? '#d4edda' : 'aliceblue',
+          color: inCorrect ? '#721c24' : correct || correctAnswer || lostTime ? '#155724' : 'initial',
+          background: inCorrect ? '#f8d7da' : correct || correctAnswer || lostTime ? '#d4edda' : 'aliceblue',
           border: inCorrect
             ? '1px solid #f5c6cb'
-            : correct || correctAnswer
+            : correct || correctAnswer || lostTime
             ? '1px solid #c3e6cb'
             : '1px solid #84c5fe',
           width: '100%',
@@ -41,7 +44,7 @@ export const QuestionsItem = observer(({ answer }: PropsType) => {
           WebkitLineClamp: '1',
           WebkitBoxOrient: 'vertical',
 
-          pointerEvents: userAnswer.length ? 'none' : 'initial',
+          pointerEvents: userAnswer.length || timer == 0 ? 'none' : 'initial',
           '&:hover': {
             color: '#004085',
             background: '#cce5ff',
@@ -52,17 +55,18 @@ export const QuestionsItem = observer(({ answer }: PropsType) => {
         <Tooltip title={answer}>
           <Typography
             component="span"
-            dangerouslySetInnerHTML={{ __html: answer }}
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(answer, { USE_PROFILES: { html: true } }) }}
             sx={{
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               display: '-webkit-box',
               WebkitLineClamp: '1',
               WebkitBoxOrient: 'vertical',
+              textAlign: 'left',
             }}
           />
         </Tooltip>
-        {correct || correctAnswer ? (
+        {correct || correctAnswer || lostTime ? (
           <CheckCircleOutlineIcon color="success" />
         ) : inCorrect ? (
           <CancelOutlinedIcon color="error" />

@@ -1,11 +1,36 @@
-import { Box, Typography, Button } from '@mui/material';
+import { useEffect } from 'react';
+import { Box, Typography, Button, LinearProgress } from '@mui/material';
 import { mainDictionary } from '@/dictionary';
-import { QuestionsItem } from './QuestionsItem';
 import { observer } from 'mobx-react-lite';
+import DOMPurify from 'dompurify';
+import { useProgress, useTimer } from '@/hooks';
+import { QuestionsItem } from './QuestionsItem';
 import QuestionsStore from '@/store';
 
 export const QuestionsModal = observer(() => {
   const { currentAnswer, questions, currentNumber, nextButton, userAnswer, totalAnswer } = QuestionsStore;
+  const { progress, linerTimer, resetProgress } = useProgress();
+  const { timer, startTimer, resetTimer } = useTimer(15);
+
+  useEffect(() => {
+    if (progress >= 100 || userAnswer.length) {
+      clearInterval(linerTimer.current);
+    }
+    // eslint-disable-next-line
+  }, [progress]);
+
+  useEffect(() => {
+    if (timer <= 0 || userAnswer.length) {
+      clearInterval(startTimer.current);
+    }
+    // eslint-disable-next-line
+  }, [timer]);
+
+  const handleNextBtn = () => {
+    nextButton();
+    resetTimer();
+    resetProgress();
+  };
 
   return (
     <Box
@@ -51,7 +76,7 @@ export const QuestionsModal = observer(() => {
           }}
         >
           <Typography sx={{ fontWeight: '400', fontSize: '17px', userSelect: 'none' }}>
-            {mainDictionary.timeLeft}
+            {mainDictionary[timer > 0 ? 'timeLeft' : 'timeOff']}
           </Typography>
           <Typography
             sx={{
@@ -68,19 +93,35 @@ export const QuestionsModal = observer(() => {
               userSelect: 'none',
             }}
           >
-            15
+            {timer}
           </Typography>
         </Box>
       </Box>
+
+      <Box sx={{ width: '100%' }}>
+        <LinearProgress
+          variant="determinate"
+          value={progress}
+          color={progress > 80 && progress < 100 ? 'warning' : progress >= 100 ? 'error' : 'primary'}
+          sx={{
+            '& .MuiLinearProgress-bar': {
+              transition: 'transform 0.2s ease-out',
+            },
+          }}
+        />
+      </Box>
+
       <Box component="main" sx={{ padding: '25px 30px 20px 30px' }}>
         <Typography
           sx={{ fontSize: '22px', fontWeight: '600' }}
           component="h3"
-          dangerouslySetInnerHTML={{ __html: questions[currentNumber]?.question }}
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(questions[currentNumber]?.question, { USE_PROFILES: { html: true } }),
+          }}
         ></Typography>
         <Box component="ul" sx={{ padding: '20px 0' }}>
           {currentAnswer?.map((answer, index) => (
-            <QuestionsItem key={index} answer={answer} />
+            <QuestionsItem key={index} answer={answer} timer={timer} />
           ))}
         </Box>
       </Box>
@@ -117,8 +158,8 @@ export const QuestionsModal = observer(() => {
             cursor: 'pointer',
             transition: 'all 0.3s ease',
           }}
-          onClick={() => nextButton()}
-          disabled={userAnswer.length ? false : true || totalAnswer >= currentNumber}
+          onClick={handleNextBtn}
+          disabled={timer !== 0 && (userAnswer.length ? false : true || totalAnswer >= currentNumber)}
         >
           Next Que
         </Button>

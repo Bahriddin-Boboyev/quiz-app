@@ -1,16 +1,8 @@
-import {
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  Box,
-  Typography,
-} from '@mui/material';
+import { Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Box } from '@mui/material';
 import { mainDictionary } from '@/dictionary';
 import QuestionsStore from '@/store';
 import { observer } from 'mobx-react-lite';
+import DOMPurify from 'dompurify';
 
 export const DialogComponent = observer(() => {
   const { isDialog, closeDialog, setModal } = QuestionsStore;
@@ -35,19 +27,12 @@ export const DialogComponent = observer(() => {
           <Box component="ol" sx={{ padding: '15px' }}>
             {mainDictionary.dialogRules.map((rule) => (
               <Box key={rule.id} component="li" margin="5px 0">
-                <DialogContentText id="alert-dialog-description" sx={{ color: '#000', fontSize: '17px' }}>
-                  {rule.id === 1 ? (
-                    <>
-                      You will have only{' '}
-                      <Typography component="strong" sx={{ color: '#007bff', fontWeight: 'bold' }}>
-                        15 seconds
-                      </Typography>{' '}
-                      per each question.
-                    </>
-                  ) : (
-                    rule.text
-                  )}
-                </DialogContentText>
+                <DialogContentText
+                  id="alert-dialog-description"
+                  sx={{ color: '#000', fontSize: '17px' }}
+                  component="div"
+                  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(rule.text, { ALLOWED_TAGS: ['strong'] }) }}
+                ></DialogContentText>
               </Box>
             ))}
           </Box>

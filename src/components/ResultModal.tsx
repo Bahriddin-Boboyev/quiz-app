@@ -2,6 +2,7 @@ import { mainDictionary } from '@/dictionary';
 import { Box, Button, Typography } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import QuestionsStore from '@/store';
+import DOMPurify from 'dompurify';
 
 export const ResultModal = observer(() => {
   const { totalAnswer, totalCorrectAnswer, setResultModal, openDialog } = QuestionsStore;
@@ -26,9 +27,17 @@ export const ResultModal = observer(() => {
     >
       <Box component="img" src="crown.svg" width={125} height={100} sx={{ mb: '20px' }} />
 
-      <Typography sx={{ fontSize: '20px', fontWeight: '500', textAlign: 'center' }}>
-        {mainDictionary.resultText} <br /> and sorry 😐, You got only <strong>{totalCorrectAnswer}</strong> out of{' '}
-        <strong>{totalAnswer}</strong>
+      <Typography sx={{ fontSize: '18px', fontWeight: '500', textAlign: 'center', lineHeight: '1.5' }}>
+        {mainDictionary.resultText} <br />
+        <Typography
+          sx={{ fontSize: '18px', fontWeight: '500', textAlign: 'center', lineHeight: '1.5' }}
+          component="span"
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(mainDictionary.scoreResultTexts(totalCorrectAnswer, totalAnswer), {
+              ALLOWED_TAGS: ['strong'],
+            }),
+          }}
+        />
       </Typography>
 
       <Box sx={{ display: 'flex', my: '20px', columnGap: '20px' }}>
