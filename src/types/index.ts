@@ -1,4 +1,5 @@
 export type Question = {
+  answers: string[];
   category: string;
   correct_answer: string;
   difficulty: string;

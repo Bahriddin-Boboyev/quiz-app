@@ -4,7 +4,7 @@ import { Difficulty, Question } from '@/types';
 
 export const fetchQuestions = async (amount: number, difficulty: Difficulty) => {
   const BASE_URL = import.meta.env.VITE_BASE_URL;
-  const params = { amount, difficulty };
+  const params = { amount, difficulty, category: 18, type: 'multiple' };
   const { data } = await axios.get(BASE_URL, { params });
 
   return data.results.map((question: Question) => ({

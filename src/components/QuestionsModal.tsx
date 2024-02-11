@@ -1,8 +1,12 @@
 import { Box, Typography, Button } from '@mui/material';
 import { mainDictionary } from '@/dictionary';
 import { QuestionsItem } from './QuestionsItem';
+import { observer } from 'mobx-react-lite';
+import QuestionsStore from '@/store';
 
-export const QuestionsModal = () => {
+export const QuestionsModal = observer(() => {
+  const { currentAnswer, questions, currentNumber, nextButton, userAnswer, totalAnswer } = QuestionsStore;
+
   return (
     <Box
       sx={{
@@ -69,12 +73,15 @@ export const QuestionsModal = () => {
         </Box>
       </Box>
       <Box component="main" sx={{ padding: '25px 30px 20px 30px' }}>
-        <Typography sx={{ fontSize: '22px', fontWeight: '600' }}>4. What does SQL stand for?</Typography>
+        <Typography
+          sx={{ fontSize: '22px', fontWeight: '600' }}
+          component="h3"
+          dangerouslySetInnerHTML={{ __html: questions[currentNumber]?.question }}
+        ></Typography>
         <Box component="ul" sx={{ padding: '20px 0' }}>
-          <QuestionsItem />
-          <QuestionsItem />
-          <QuestionsItem />
-          <QuestionsItem />
+          {currentAnswer?.map((answer, index) => (
+            <QuestionsItem key={index} answer={answer} />
+          ))}
         </Box>
       </Box>
       <Box
@@ -91,11 +98,11 @@ export const QuestionsModal = () => {
         <Box>
           <Typography component="p">
             <Typography component="span" fontWeight="500">
-              1
+              {currentNumber + 1}
             </Typography>
             &nbsp; of&nbsp;
             <Typography component="span" fontWeight="500">
-              5
+              {totalAnswer}
             </Typography>
             &nbsp; Questions
           </Typography>
@@ -108,13 +115,14 @@ export const QuestionsModal = () => {
             fontSize: '17px',
             fontWeight: '400',
             cursor: 'pointer',
-            textTransform: 'initial',
             transition: 'all 0.3s ease',
           }}
+          onClick={() => nextButton()}
+          disabled={userAnswer.length ? false : true || totalAnswer >= currentNumber}
         >
           Next Que
         </Button>
       </Box>
     </Box>
   );
-};
+});

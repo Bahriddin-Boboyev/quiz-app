@@ -3,6 +3,7 @@ export const mainDictionary = {
   timeOff: 'Time Off',
   timeLeft: 'Time Left',
   dialogTitle: 'Some Rules of this Quiz',
+  resultText: "You've completed the Quiz!",
   dialogRules: [
     { id: 1, text: 'You will have only 15 seconds per each question.' },
     { id: 2, text: "Once you select your answer, it can't be undone." },

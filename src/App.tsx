@@ -6,12 +6,40 @@ import { QuestionsModal } from './components/QuestionsModal';
 import { fetchQuestions } from './api/request';
 import { Difficulty } from './types';
 import QuestionsStore from './store';
+import { Loading } from './components/Loading';
+import { AxiosError } from 'axios';
+import { Notification } from './components/Notification';
+import { ResultModal } from './components/ResultModal';
+import { questionCount } from '@/constants';
 
 const App = observer(() => {
-  const { openDialog, isModal } = QuestionsStore;
+  const {
+    openDialog,
+    isModal,
+    isLoading,
+    setQuestion,
+    setLoading,
+    setNotification,
+    setOpenNotification,
+    isResultModal,
+  } = QuestionsStore;
 
-  const startHandleQuiz = () => {
-    fetchQuestions(10, Difficulty.EASY);
+  const startHandleQuiz = async () => {
+    setLoading(true);
+    try {
+      const result = await fetchQuestions(questionCount, Difficulty.EASY);
+      setQuestion(result);
+    } catch (error) {
+      console.error(error);
+
+      if (error instanceof AxiosError) {
+        console.log(error);
+        setNotification(error.message);
+        setOpenNotification(true);
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -19,8 +47,6 @@ const App = observer(() => {
       startHandleQuiz();
     }
   }, [isModal]);
-
-  console.log(isModal);
 
   return (
     <Box>
@@ -41,7 +67,6 @@ const App = observer(() => {
               fontSize: '25px',
               padding: '15px 30px',
               fontWeight: '500',
-              textTransform: 'initial',
               '&:hover': {
                 backgroundColor: 'white',
               },
@@ -53,7 +78,10 @@ const App = observer(() => {
         </Box>
 
         <DialogComponent />
-        {isModal && <QuestionsModal />}
+        {!isLoading && isModal && <QuestionsModal />}
+        {isResultModal && <ResultModal />}
+        <Loading open={isLoading} />
+        <Notification />
       </Container>
     </Box>
   );
