@@ -11,9 +11,10 @@ export const mainStyle = {
   starQuizBtn: {
     bgcolor: '#fff',
     fontFamily: 'Poppins',
-    fontSize: '25px',
+    fontSize: { xs: '20px', md: '25px' },
     padding: '15px 30px',
     fontWeight: '500',
+    textWrap: 'nowrap',
     '&:hover': {
       backgroundColor: 'white',
     },
@@ -32,7 +33,8 @@ export const mainStyle = {
 
   resultModalBox: {
     bgcolor: '#fff',
-    width: '450px',
+    maxWidth: '450px',
+    width: '95%',
     position: 'absolute',
     top: '50%',
     left: '50%',
@@ -62,7 +64,8 @@ export const mainStyle = {
 
   questionModalBox: {
     bgcolor: '#fff',
-    width: '550px',
+    maxWidth: '550px',
+    width: '95%',
     position: 'absolute',
     top: '50%',
     left: '50%',
@@ -73,7 +76,7 @@ export const mainStyle = {
 
   questionModalHeaderBox: {
     height: '70px',
-    padding: '0 30px',
+    paddingX: { xs: '10px', md: '30px' },
     display: 'flex',
     alignItems: 'center',
     background: '#fff',
@@ -94,13 +97,18 @@ export const mainStyle = {
     justifyContent: 'space-between',
   },
 
-  headerTimerText: { fontWeight: '400', fontSize: '17px', userSelect: 'none' },
+  headerTitle: {
+    fontSize: { xs: '17px', md: '20px' },
+    fontWeight: '600',
+  },
+
+  headerTimerText: { fontWeight: '400', fontSize: { xs: '15px', md: '17px' }, userSelect: 'none' },
 
   headerTimer: {
-    fontSize: '18px',
+    fontSize: { xs: '15px', md: '18px' },
     fontWeight: '500',
     height: '30px',
-    width: '45px',
+    width: { xs: '35px', md: '45px' },
     color: '#fff',
     borderRadius: '5px',
     lineHeight: '30px',
@@ -122,7 +130,7 @@ export const mainStyle = {
 
   mainBox: { padding: '25px 30px 20px 30px' },
 
-  mainTitle: { fontSize: '22px', fontWeight: '600' },
+  mainTitle: { fontSize: { xs: '17px', md: '22px' }, fontWeight: '600' },
 
   // FOOTER
   footerBox: {

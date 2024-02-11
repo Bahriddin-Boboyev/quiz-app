@@ -36,7 +36,7 @@ export const QuestionsModal = observer(() => {
   return (
     <Box sx={mainStyle.questionModalBox}>
       <Box component="header" sx={mainStyle.questionModalHeaderBox}>
-        <Typography variant="h3" fontSize="20px" fontWeight="600">
+        <Typography variant="h3" sx={mainStyle.headerTitle}>
           {mainDictionary.modalTitle}
         </Typography>
         <Box sx={mainStyle.headerTimerBox}>
